@@ -2,35 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import HomeRentCard from '../../Component/HomeRentCard';
 
-const rentalProperties = [
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      category: "House",
-      title: "The latest news with Flowspark",
-      RoomDetails:["2 Beds","2 baths","21sqft","1 Store"],
-      price:"US$429",
-      review:"4.6",
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      category: "Apartment",
-      title: "Stunning Apartment in Downtown",
-      RoomDetails:["3 Beds","2 Baths","1800 sqft","2 Balcony"],
-      price:"US$849",
-      review:"4.9",
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      category: "Villa",
-      title: "Luxury Villa with Ocean View",
-      RoomDetails:["4 Beds","4 Baths","4000 sqft","Swimming Pool"],
-      price:"US$1999",
-      review:"5.0",
-    }
-  ];
+
 
 const Hotel = () => {
   const [rentalProperties, setrentalProperties] = useState([]);
