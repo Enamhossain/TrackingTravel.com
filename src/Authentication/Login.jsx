@@ -4,16 +4,18 @@ import React, { useEffect } from "react";
 
 import useAuth from "../Hook/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+
+
+
 
 // eslint-disable-next-line react/prop-types
 const Login = ({ handleCloseLoginModal }) => {
     
-    const {  googleLogin, singIn ,user } = useAuth();
+    const {  googleSignIn, singIn ,user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location?.state?.from?.pathname || "/";
-
+    
     const handleSubmit = async (e) => {
       e.preventDefault();
       const form = e.target;
@@ -24,14 +26,28 @@ const Login = ({ handleCloseLoginModal }) => {
       await singIn(email, password);
     };
   
+  
+    
     const handleGoogleSignIn = () => {
-      googleLogin()
-      .then(() => {
-        console.log('User signed out successfully');
-        toast.success('Successfully created!');
-      })
-      .catch(error => {
-        console.error('Error signing out:', error);
+      googleSignIn().then((data) => {
+        if (data?.user?.email) {
+          const userInfo = {
+            email: data?.user?.email,
+            name: data?.user?.displayName,
+          };
+          console.log(userInfo)
+          fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userInfo),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+             console.log(data)
+            });
+        }
       });
     };
 

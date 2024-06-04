@@ -10,6 +10,8 @@ import Dashboard from "../Page/Dashboard/Dashboard";
 import AddDashboardHome from "../Page/Dashboard/AddDashboardHome";
 import AddDashboardcar from "../Page/Dashboard/AddDashboardcar";
 import ManageServiceData from "../Page/Dashboard/ManageServiceData";
+import CarCardDetatilsSection from "../Component/CarCardDetatilsSection";
+import ErrorPage from "../Component/ErrorPage";
 
 // Define the routes using the named export
 export const router = createBrowserRouter([
@@ -19,12 +21,21 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home />
+                element: <Home/>
             },
+             
             {
                 path: "hotels",
                 element: <Hotel />
             },
+            {
+                path: "/rentCar/:id",
+                element: <CarCardDetatilsSection />,
+                loader: ({ params }) =>
+                  fetch(
+                    `http://localhost:3000/RentCar/${params?.id}`
+                  ),
+              },
             {
                 path: "login",
                 element: <Login />
@@ -39,6 +50,7 @@ export const router = createBrowserRouter([
     {
         path: "dashboard",
         element: <PrivateRoutes> <DashboardLayout/></PrivateRoutes>,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "",

@@ -82,7 +82,7 @@ const Navbar = () => {
             }`}
           >
             <Link
-              to="#"
+              to="/"
               className="block md:text-gray-100 transition-colors duration-300 dark:text-white md:px-4 hover:text-blue-500 dark:hover:text-blue-400"
             >
               Home

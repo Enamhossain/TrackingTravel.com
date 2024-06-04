@@ -1,10 +1,43 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
-
+import axios from "axios";
+import toast from 'react-hot-toast';
 const AddDashboardCar = () => {
+
+  const handleCreateCar = async (e) => {
+
+    
+    e.preventDefault();
+    const form =e.target
+    const carData = {
+      id: form.id.value,
+      title: form.title.value,
+      model: form.model.value,
+      year: form.year.value,
+      price: form.price.value,
+      oldPrice: form.oldPrice.value,
+      discount: form.discount.value,
+      tags: form.tags.value ? form.tags.value.split(',') : [],
+      cancellation: form.cancellation.value,
+      features: form.features.value.split(','),
+      type: form.type.value,
+      image: form.image.value,
+      note: form.note.value,
+      reviews: form.reviews.value,
+      rating: form.rating.value,
+    };
+  console.log(carData)
+    try {
+      await axios.post("http://localhost:3000/rentCar", carData);
+      toast.success('Successfully Add Car !')
+    } catch (error) {
+      console.error('Error creating add to car:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-      {/* Hero Section */}
+     
       <div className="bg-blue-600 text-white w-full py-8">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl font-bold mb-2">Add a New Car</h1>
@@ -12,23 +45,23 @@ const AddDashboardCar = () => {
         </div>
       </div>
 
-      {/* Form Section */}
+   
       <div className="bg-white w-full max-w-2xl mx-auto mt-10 p-8 shadow-lg rounded-lg">
-        <form>
-          {/* Car Make */}
+        <form onSubmit={handleCreateCar}>
+      
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="make">
-              Car Make
+              Car Title
             </label>
             <input
               type="text"
-              id="make"
-              name="make"
+              id="title"
+              name="title"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Enter car make"
             />
           </div>
-          {/* Car Model */}
+          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="model">
               Car Model
@@ -41,7 +74,7 @@ const AddDashboardCar = () => {
               placeholder="Enter car model"
             />
           </div>
-          {/* Year */}
+          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="year">
               Year
@@ -54,7 +87,7 @@ const AddDashboardCar = () => {
               placeholder="Enter car year"
             />
           </div>
-          {/* Price */}
+         
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
               Price
@@ -67,7 +100,7 @@ const AddDashboardCar = () => {
               placeholder="Enter car price"
             />
           </div>
-          {/* Old Price */}
+       
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="oldPrice">
               Old Price
@@ -80,7 +113,7 @@ const AddDashboardCar = () => {
               placeholder="Enter old price"
             />
           </div>
-          {/* Discount */}
+        
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="discount">
               Discount (%)
@@ -93,20 +126,20 @@ const AddDashboardCar = () => {
               placeholder="Enter discount percentage"
             />
           </div>
-          {/* Tag */}
+       
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tag">
               Tag
             </label>
             <input
               type="text"
-              id="tag"
-              name="tag"
+              id="tags"
+              name="tags"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Enter tag"
             />
           </div>
-          {/* Cancellation Policy */}
+         
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cancellation">
               Cancellation Policy
@@ -118,7 +151,7 @@ const AddDashboardCar = () => {
               placeholder="Enter cancellation policy"
             />
           </div>
-          {/* Features */}
+          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="features">
               Features
@@ -130,7 +163,7 @@ const AddDashboardCar = () => {
               placeholder="Enter features"
             />
           </div>
-          {/* Type */}
+         
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="type">
               Type
@@ -143,20 +176,20 @@ const AddDashboardCar = () => {
               placeholder="Enter car type"
             />
           </div>
-          {/* Image */}
+         
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
-              Image URL
+              Image 
             </label>
             <input
               type="text"
-              id="image"
               name="image"
+              placeholder="Image"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Enter image URL"
+              
             />
           </div>
-          {/* Note */}
+          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="note">
               Note
@@ -168,7 +201,7 @@ const AddDashboardCar = () => {
               placeholder="Enter note"
             />
           </div>
-          {/* Reviews */}
+    
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="reviews">
               Reviews
@@ -180,7 +213,7 @@ const AddDashboardCar = () => {
               placeholder="Enter reviews"
             />
           </div>
-          {/* Rating */}
+         
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="rating">
               Rating
@@ -194,7 +227,7 @@ const AddDashboardCar = () => {
               placeholder="Enter rating"
             />
           </div>
-          {/* Submit Button */}
+        
           <div className="flex items-center justify-between">
             <button
               type="submit"

@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import Login from "./Login";
 import useAuth from "../Hook/useAuth";
-import AuthProvider from "../AuthProvider/AuthProvider";
+import { Navigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 
 // eslint-disable-next-line react/prop-types
 const Registertion = ({ handleCloseEditModal }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
-
+  const from = location?.state?.from?.pathname || "/";
   const handleOpenLoginModal = () => {
     setShowLoginModal(true);
   };
@@ -19,8 +21,7 @@ const Registertion = ({ handleCloseEditModal }) => {
 
   const [passMatch, setPassMatch] = useState(true);
   const [error, setError] = useState('');
-  const { createUser } = useAuth(); // Ensure correct import and function name
-  const { googleLogin } = useAuth(AuthProvider);
+  const { createUser,googleSignIn } = useAuth(); // Ensure correct import and function name
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -53,9 +54,39 @@ const Registertion = ({ handleCloseEditModal }) => {
 
 
 
-  const handleGoogleSignIn = () => {
-    googleLogin();
-  };
+    
+  const handleGoogleSingIn = () => {
+    googleSignIn().then((result) => {
+      console.log(result)
+      const users = result?.user;
+      console.log(users)
+      const userInfo = {
+        email: result.user?.email,
+        name: result.user?.displayName
+      }
+      fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userInfo),
+        
+      })
+        .then((res) => res.json())
+        .then((data) => {
+         console.log(data)
+         
+         toast.success('Successfully created!');
+         window.location.reload();
+        });
+       
+     
+    })
+      .catch((error) => {
+        // Handle errors
+        console.error(error);
+      });
+  }
 
   return (
     <>
@@ -83,7 +114,7 @@ const Registertion = ({ handleCloseEditModal }) => {
             <p className="mt-4 text-gray-500 dark:text-gray-400">
               Let’s get you all set up so you can verify your personal account and begin setting up your profile.
             </p>
-            <div onClick={handleGoogleSignIn}>
+            <div onClick={() => handleGoogleSingIn()}>
               <a
                 href="#"
                 className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"

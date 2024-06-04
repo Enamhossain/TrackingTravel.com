@@ -32,14 +32,10 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const googleLogin = async () => {
+  const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Google Sign-In Error:", error);
-    }
-  };
+    return signInWithPopup(auth, provider);
+}
 
   useEffect(() => {
     const unscubcribe = onAuthStateChanged(auth, (currentUser) => {
@@ -56,7 +52,7 @@ const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const authInfo = { user, loading, googleLogin, createUser, singIn, logOut };
+  const authInfo = { user, loading, googleSignIn, createUser, singIn, logOut };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

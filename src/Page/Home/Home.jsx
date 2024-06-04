@@ -6,6 +6,7 @@ import Hotel from "./Hotel";
 import HomeHero from "../../Component/HomeHero";
 import HomeFeatureSection from "../../Component/HomeFeatureSection";
 import Car from "./Car";
+import TrendingArticles from "../../Component/BlogCardSection";
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
        <Hotel/>
        <Car/>
        <HomeFeatureSection/>
+       <TrendingArticles></TrendingArticles>
     </div>
   );
 };
