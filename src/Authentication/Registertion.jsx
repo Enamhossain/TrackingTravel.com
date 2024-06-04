@@ -75,7 +75,7 @@ const Registertion = ({ handleCloseEditModal }) => {
         .then((res) => res.json())
         .then((data) => {
          console.log(data)
-         
+         localStorage.setItem('token',data?.token)
          toast.success('Successfully created!');
          window.location.reload();
         });

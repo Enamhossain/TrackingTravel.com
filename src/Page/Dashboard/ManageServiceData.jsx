@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { CgTrashEmpty } from 'react-icons/cg'
 import { FaEdit } from "react-icons/fa";
+import DashboardEditData from './DashboardEditData';
 
 const ManageServiceData = () => {
       const [currentItems,setCurrentItems] = useState()
-     
+      const [showEditModal, setShowEditModal] = useState(false);
       
   console.log(currentItems)
       useEffect(() => {
@@ -24,7 +25,13 @@ const ManageServiceData = () => {
         fetchCar(); 
     }, []);
 
-
+    const handleCloseEditModal = () => {
+      setShowEditModal(false);
+    };
+  
+    const handleOpenEditModal = () => {
+      setShowEditModal(true);
+    };
   
     
     const handleDelete = async (id) => {
@@ -179,7 +186,7 @@ const ManageServiceData = () => {
                 </button>
               </td>
               <td className="px-6 py-4 flex items-center gap-2">
-               <button className="edit text-2xl">
+               <button onClick={handleOpenEditModal} className="edit text-2xl">
                <FaEdit />
                </button>
                 <button onClick={() => handleDelete(item._id)}  className="deleted text-2xl">
@@ -190,7 +197,7 @@ const ManageServiceData = () => {
           ))}
         </tbody>
       </table>
-      
+      {showEditModal && <DashboardEditData handleCloseEditModal={handleCloseEditModal} />}
     </div>
   </div>
   )
