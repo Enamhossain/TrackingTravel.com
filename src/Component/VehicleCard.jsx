@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 const VehicleCard = ({ vehicle }) => {
-   console.log(vehicle._id)
+   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <img src={vehicle.image} alt={vehicle.title} className="w-full h-48 object-cover" />
@@ -21,8 +21,8 @@ const VehicleCard = ({ vehicle }) => {
           ))}
         </div>
         <div className="flex items-center justify-between mt-4">
-          <div className="text-red-500 text-sm">{vehicle.discount}</div>
-          <div className="text-xl font-bold text-gray-900">{vehicle.price} <span className="text-gray-500 line-through">{vehicle.oldPrice}</span></div>
+          <div className="text-red-500 text-sm">{vehicle.discount} % Off</div>
+          <div className="text-xl font-bold text-gray-900"> US${vehicle.price} <span className="text-gray-500 line-through"> US${vehicle.oldPrice}</span></div>
         </div>
         <div className="flex items-center justify-between mt-4">
           <div className="text-gray-500 text-sm">{vehicle.reviews}</div>

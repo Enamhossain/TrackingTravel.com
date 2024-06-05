@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import icon from "../../public/vite.svg"
 
 
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -23,10 +24,12 @@ const Navbar = () => {
   };
 
 
+  
+
+
   const handleLogout = async()=>{
     await logOut()
     .then(() => {
-      console.log('User signed out successfully');
       toast.success('Successfully created!');
       window.location.reload();
     })
@@ -88,10 +91,10 @@ const Navbar = () => {
               Home
             </Link>
             <Link
-              to="#"
+              to="/BuyRentCar"
               className="block md:text-gray-100 transition-colors duration-300 dark:text-white md:px-4 hover:text-blue-500 dark:hover:text-blue-400"
             >
-              Flight
+              Rent Car
             </Link>
             <Link
               to="#"
@@ -142,6 +145,7 @@ const Navbar = () => {
                     src={user?.photoURL || `/assets/profile-pic (3).png`} 
                     className="object-cover w-full h-full" 
                     alt="avatar"
+                  
                   />
                 </div>
                 <h3 className="mx-2 text-gray-700 dark:text-gray-200 lg:hidden">{}</h3>
@@ -159,6 +163,7 @@ const Navbar = () => {
         </nav>
 
         {showEditModal && <Registertion handleCloseEditModal={handleCloseEditModal} />}
+      
         
       </div>
     </div>

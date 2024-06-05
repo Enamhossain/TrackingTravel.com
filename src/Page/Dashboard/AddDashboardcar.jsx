@@ -5,12 +5,11 @@ import toast from 'react-hot-toast';
 const AddDashboardCar = () => {
 
   const handleCreateCar = async (e) => {
-
-    
     e.preventDefault();
-    const form =e.target
+    const form = e.target;
+
     const carData = {
-      id: form.id.value,
+      id: form.id.value || Date.now().toString(),
       title: form.title.value,
       model: form.model.value,
       year: form.year.value,
@@ -19,19 +18,26 @@ const AddDashboardCar = () => {
       discount: form.discount.value,
       tags: form.tags.value ? form.tags.value.split(',') : [],
       cancellation: form.cancellation.value,
-      features: form.features.value.split(','),
+      features: form.features.value ? form.features.value.split(',') : [],
       type: form.type.value,
       image: form.image.value,
       note: form.note.value,
       reviews: form.reviews.value,
       rating: form.rating.value,
     };
-  console.log(carData)
+
+    if (!carData.title || !carData.model || !carData.year || !carData.price || !carData.type) {
+      toast.error('Please fill in all required fields!');
+      return;
+    }
+
     try {
-      await axios.post("http://localhost:3000/rentCar", carData);
-      toast.success('Successfully Add Car !')
+      await axios.post('http://localhost:3000/rentCar', carData);
+      toast.success('Successfully added car!');
+      form.reset();
     } catch (error) {
-      console.error('Error creating add to car:', error);
+      toast.error('Error adding car. Please try again.');
+      console.error('Error creating car:', error);
     }
   };
 
@@ -47,7 +53,7 @@ const AddDashboardCar = () => {
 
    
       <div className="bg-white w-full max-w-2xl mx-auto mt-10 p-8 shadow-lg rounded-lg">
-        <form onSubmit={handleCreateCar}>
+        <form onSubmit={handleCreateCar} className='grid grid-cols-2 gap-2'>
       
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="make">

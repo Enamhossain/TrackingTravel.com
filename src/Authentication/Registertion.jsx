@@ -27,10 +27,11 @@ const Registertion = ({ handleCloseEditModal }) => {
     const form = e.target;
     const firstName = form.firstName.value;
     const lastName = form.lastName.value;
+    const phoneNumber = form.phoneNumber.value;
     const email = form.email.value;
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
-  console.log(firstName,lastName)
+   
     if (password !== confirmPassword) {
       setPassMatch(false);
       return;
@@ -40,9 +41,25 @@ const Registertion = ({ handleCloseEditModal }) => {
     setError('');
 
     try {
-      await createUser(email, password);
+      await createUser(email, password)
+      const SaveUserInfo ={
+        email:email,
+        firstName:firstName,
+        lastName:lastName,
+        phoneNumber:phoneNumber,
+        password:password
+      }
+      fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(SaveUserInfo),
+        
+      })
       console.log('User created successfully');
-    
+      toast.success('Successfully created!');
+      window.location.reload();
     } catch (error) {
       console.error('Error creating user:', error);
       setError(error.message);
@@ -57,9 +74,9 @@ const Registertion = ({ handleCloseEditModal }) => {
     
   const handleGoogleSingIn = () => {
     googleSignIn().then((result) => {
-      console.log(result)
+     
       const users = result?.user;
-      console.log(users)
+      
       const userInfo = {
         email: result.user?.email,
         name: result.user?.displayName
@@ -74,10 +91,9 @@ const Registertion = ({ handleCloseEditModal }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-         console.log(data)
          localStorage.setItem('token',data?.token)
-         toast.success('Successfully created!');
          window.location.reload();
+         toast.success('Successfully created!');
         });
        
      

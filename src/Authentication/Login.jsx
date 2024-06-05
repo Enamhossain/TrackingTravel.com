@@ -21,7 +21,7 @@ const Login = ({ handleCloseLoginModal }) => {
       const form = e.target;
       const email = form.email.value;
       const password = form.password.value;
-      console.log(email, password);
+      
   
       await singIn(email, password);
     };
@@ -35,7 +35,7 @@ const Login = ({ handleCloseLoginModal }) => {
             email: data?.user?.email,
             name: data?.user?.displayName,
           };
-          console.log(userInfo)
+         
           fetch("http://localhost:3000/users", {
             method: "POST",
             headers: {

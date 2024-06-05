@@ -12,66 +12,89 @@ import AddDashboardcar from "../Page/Dashboard/AddDashboardcar";
 import ManageServiceData from "../Page/Dashboard/ManageServiceData";
 import CarCardDetatilsSection from "../Component/CarCardDetatilsSection";
 import ErrorPage from "../Component/ErrorPage";
+import DashboardEditData from "../Page/Dashboard/DashboardEditData";
+import ProfileEditData from "../Page/Dashboard/ProfileEditData";
+import RentCar from "../Page/Rent Car/RentCar";
 
 // Define the routes using the named export
 export const router = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
         path: "/",
-        element: <Layout />,
-        children: [
-            {
-                path: "/",
-                element: <Home/>
-            },
-             
-            {
-                path: "hotels",
-                element: <Hotel />
-            },
-            {
-                path: "/rentCar/:id",
-                element: <CarCardDetatilsSection />,
-                loader: ({ params }) =>
-                  fetch(
-                    `http://localhost:3000/RentCar/${params?.id}`
-                  ),
-              },
-            {
-                path: "login",
-                element: <Login />
-            },
-            {
-                path: "registertion",
-                element: <Registertion />
-            },
-        ]
-    },
-   
-    {
-        path: "dashboard",
-        element: <PrivateRoutes> <DashboardLayout/></PrivateRoutes>,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: "",
-                element: <Dashboard />
-            },
-            {
-                path: "Addservicehome",
-                element: <AddDashboardHome />
-            },
-            {
-                path: "Addservicecar",
-                element: <AddDashboardcar />
-            },
-            {
-                path: "manageservicedata",
-                element: <ManageServiceData />
-            },
-     
- ] },
-    
+        element: <Home />,
+      },
+     {
+        path:"BuyRentCar",
+        element:<RentCar/>
+     },
+      {
+        path: "hotels",
+        element: <Hotel />,
+      },
+      {
+        path: "/rentCar/:id",
+        element: <CarCardDetatilsSection />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/RentCar/${params?.id}`),
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "registertion",
+        element: <Registertion />,
+      },
+    ],
+  },
+
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoutes>
+        {" "}
+        <DashboardLayout />
+      </PrivateRoutes>
+    ),
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "",
+        element: <Dashboard />,
+      },
+      {
+        path: "Addservicehome",
+        element: <AddDashboardHome />,
+      },
+      {
+        path: "Addservicecar",
+        element: <AddDashboardcar />,
+      },
+      {
+        path: "manageservicedata",
+        element: <ManageServiceData />,
+      },
+      {
+        path: "profile/edit/:id",
+        element: <ProfileEditData/>,
+        loader: ({ params }) =>
+          fetch(
+            `http://localhost:3000/users/edit/${params.id}`
+        ),
+      },
+      {
+        path: "AllProduct/edit/:id",
+        element: <DashboardEditData />,
+        loader: ({ params }) =>
+          fetch(
+            `http://localhost:3000/rentCar/${params.id}`
+          ),
+      },
+    ],
+  },
 ]);
 
 export default router;
-
