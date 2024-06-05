@@ -28,16 +28,40 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const Dashboard = () => {
   const { user } = useAuth();
-
-  console.log(user)
-  const [userInfo, setUserInfo] = useState();
+  const [userInfo, setUserInfo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
- 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    fetch(`https://trackingtrip-server.onrender.com/users/${user?.email}`)
-      .then((res) => res.json())
-      .then((data) => setUserInfo(data));
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token");
+      if (user?.email) {
+        try {
+          const response = await fetch(`https://trackingtrip-server.onrender.com/users/${user?.email}`, {
+            headers: {
+              "Content-type": "application/json",
+              authorization: `Bearer ${token}`,
+            }
+          });
+          if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+          }
+          const data = await response.json();
+          setUserInfo(data);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching user info:", error.message);
+          setError(error.message);
+          setLoading(false);
+        }
+      }
+    };
+    fetchUserInfo();
   }, [user]);
+
+  console.log(userInfo);
+
 
   const handleProfileClick = () => {
     setIsModalOpen(true);

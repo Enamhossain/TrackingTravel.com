@@ -9,11 +9,10 @@ import profile from "../assets/profile-pic (3).png"
 const userInfoModal = ({ isOpen, onClose, userInfo }) => {
   if (!isOpen) return null;
 
-
   const fullName = userInfo?.firstName && userInfo?.lastName && userInfo?.displayName
     ? `${userInfo.firstName} ${userInfo.lastName}` 
     : "userInfo Name";
-
+   console.log(userInfo)
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-1/3 relative">
