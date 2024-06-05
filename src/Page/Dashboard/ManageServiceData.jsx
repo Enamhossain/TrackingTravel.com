@@ -14,7 +14,7 @@ const ManageServiceData = () => {
   useEffect(() => {
     async function fetchCar() {
       try {
-        const response = await axios.get("http://localhost:3000/rentCar");
+        const response = await axios.get("https://tracking-trip-server.vercel.app/rentCar");
         if (response.status === 200) {
           setCurrentItems(response.data);
           setSearch(response.data);
@@ -28,7 +28,7 @@ const ManageServiceData = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/rentCar/${id}`);
+      await axios.delete(`https://tracking-trip-server.vercel.app/rentCar/${id}`);
       setCurrentItems((prevCars) => prevCars.filter((car) => car.id !== id));
       setSearch((prevCars) => prevCars.filter((car) => car.id !== id));
       toast.success("Car deleted successfully");

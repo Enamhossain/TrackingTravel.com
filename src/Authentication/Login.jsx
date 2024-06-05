@@ -36,7 +36,7 @@ const Login = ({ handleCloseLoginModal }) => {
             name: data?.user?.displayName,
           };
          
-          fetch("http://localhost:3000/users", {
+          fetch("https://tracking-trip-server.vercel.app/users", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
