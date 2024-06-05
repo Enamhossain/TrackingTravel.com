@@ -8,7 +8,7 @@ const Car = () => {
   const {loading} = useAuth() 
     
     useEffect(() => {
-      fetch('https://tracking-trip-server.vercel.app/RentCar')
+      fetch('https://trackingtrip-server.onrender.com/RentCar')
         .then(response => response.json())
         .then(data =>setVehicle(data))
         

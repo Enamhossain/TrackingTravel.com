@@ -34,7 +34,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
  
   useEffect(() => {
-    fetch(`https://tracking-trip-server.vercel.app/users/${user?.email}`)
+    fetch(`https://trackingtrip-server.onrender.com/users/${user?.email}`)
       .then((res) => res.json())
       .then((data) => setUserInfo(data));
   }, [user]);

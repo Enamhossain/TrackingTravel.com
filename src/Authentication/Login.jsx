@@ -36,7 +36,7 @@ const Login = ({ handleCloseLoginModal }) => {
             name: data?.user?.displayName,
           };
          
-          fetch("https://tracking-trip-server.vercel.app/users", {
+          fetch("https://trackingtrip-server.onrender.com/users", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

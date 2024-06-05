@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const axiosPublic = axios.create({
-    baseURL: 'https://tracking-trip-server.vercel.app/'
+    baseURL: 'https://trackingtrip-server.onrender.com/'
 })
 
 const useAxiosPublic = () => {

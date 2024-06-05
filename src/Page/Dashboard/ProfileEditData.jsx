@@ -23,7 +23,7 @@ const ProfileEditData = () => {
       country: form.country.value,
     };
 
-    fetch(`https://tracking-trip-server.vercel.app/users/${data?.email}`, {
+    fetch(`https://trackingtrip-server.onrender.com/users/${data?.email}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

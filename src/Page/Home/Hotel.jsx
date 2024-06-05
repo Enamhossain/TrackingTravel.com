@@ -9,7 +9,7 @@ const Hotel = () => {
    
     
   useEffect(() => {
-    fetch('https://tracking-trip-server.vercel.app/RentalProperties')
+    fetch('https://trackingtrip-server.onrender.com/RentalProperties')
       .then(response => response.json())
       .then(data =>setrentalProperties(data))
       

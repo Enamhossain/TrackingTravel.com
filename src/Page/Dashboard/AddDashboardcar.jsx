@@ -32,7 +32,7 @@ const AddDashboardCar = () => {
     }
 
     try {
-      await axios.post('https://tracking-trip-server.vercel.app/rentCar', carData);
+      await axios.post('https://trackingtrip-server.onrender.com/rentCar', carData);
       toast.success('Successfully added car!');
       form.reset();
     } catch (error) {
