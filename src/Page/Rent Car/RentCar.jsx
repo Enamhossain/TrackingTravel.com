@@ -7,7 +7,7 @@ const RentCar = () => {
    
     
     useEffect(() => {
-      fetch('http://localhost:3000/RentCar')
+      fetch('https://trackingtrip-server.onrender.com/RentCar')
         .then(response => response.json())
         .then(data =>setcarRentDetails(data))
         

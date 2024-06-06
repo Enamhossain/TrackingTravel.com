@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
         path: "/rentCar/:id",
         element: <CarCardDetatilsSection />,
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/RentCar/${params?.id}`),
+          fetch(`https://trackingtrip-server.onrender.com/RentCar/${params?.id}`),
       },
       {
         path: "login",
@@ -82,7 +82,7 @@ export const router = createBrowserRouter([
         element: <ProfileEditData/>,
         loader: ({ params }) =>
           fetch(
-            `http://localhost:3000/users/edit/${params.id}`
+            `https://trackingtrip-server.onrender.com/users/edit/${params.id}`
         ),
       },
       {
@@ -90,7 +90,7 @@ export const router = createBrowserRouter([
         element: <DashboardEditData />,
         loader: ({ params }) =>
           fetch(
-            `http://localhost:3000/rentCar/${params.id}`
+            `https://trackingtrip-server.onrender.com/rentCar/${params.id}`
           ),
       },
     ],

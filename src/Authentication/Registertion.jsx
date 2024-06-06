@@ -49,7 +49,7 @@ const Registertion = ({ handleCloseEditModal }) => {
         phoneNumber:phoneNumber,
         password:password
       }
-      fetch("http://localhost:3000/users", {
+      fetch("https://trackingtrip-server.onrender.com/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const Registertion = ({ handleCloseEditModal }) => {
         email: result.user?.email,
         name: result.user?.displayName
       }
-      fetch("http://localhost:3000/users", {
+      fetch("https://trackingtrip-server.onrender.com/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

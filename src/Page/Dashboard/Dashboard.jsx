@@ -38,7 +38,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       if (user?.email) {
         try {
-          const response = await fetch(`http://localhost:3000/users/${user?.email}`, {
+          const response = await fetch(`https://trackingtrip-server.onrender.com/users/${user?.email}`, {
             headers: {
               "Content-type": "application/json",
               authorization: `Bearer ${token}`,

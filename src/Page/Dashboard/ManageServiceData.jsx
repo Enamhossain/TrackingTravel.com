@@ -14,7 +14,7 @@ const ManageServiceData = () => {
   useEffect(() => {
     async function fetchCar() {
       try {
-        const response = await axios.get("http://localhost:3000/rentCar");
+        const response = await axios.get("https://trackingtrip-server.onrender.com/rentCar");
         if (response.status === 200) {
           setCurrentItems(response.data);
           setSearch(response.data);
@@ -34,7 +34,7 @@ const ManageServiceData = () => {
         throw new Error("No token found");
       }
 
-      await axios.delete(`http://localhost:3000/rentCar/${id}`, {
+      await axios.delete(`https://trackingtrip-server.onrender.com/rentCar/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

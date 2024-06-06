@@ -9,7 +9,7 @@ const Hotel = () => {
    
     
   useEffect(() => {
-    fetch('http://localhost:3000/RentalProperties')
+    fetch('https://trackingtrip-server.onrender.com/RentalProperties')
       .then(response => response.json())
       .then(data =>setrentalProperties(data))
       

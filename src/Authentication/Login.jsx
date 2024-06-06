@@ -36,7 +36,7 @@ const Login = ({ handleCloseLoginModal }) => {
             name: data?.user?.displayName,
           };
          
-          fetch("http://localhost:3000/users", {
+          fetch("https://trackingtrip-server.onrender.com/users", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

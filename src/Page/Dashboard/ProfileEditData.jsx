@@ -23,7 +23,7 @@ const ProfileEditData = () => {
       country: form.country.value,
     };
 
-    fetch(`http://localhost:3000/users/${data?.email}`, {
+    fetch(`https://trackingtrip-server.onrender.com/users/${data?.email}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
