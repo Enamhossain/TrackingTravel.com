@@ -8,7 +8,7 @@ const Car = () => {
   const {loading} = useAuth() 
     
     useEffect(() => {
-      fetch('https://trackingtrip-server.onrender.com/RentCar')
+      fetch('http://localhost:3000/RentCar')
         .then(response => response.json())
         .then(data =>setVehicle(data))
         

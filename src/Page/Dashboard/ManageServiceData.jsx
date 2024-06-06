@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { CgTrashEmpty } from 'react-icons/cg';
 import { FaEdit } from "react-icons/fa";
@@ -14,7 +14,7 @@ const ManageServiceData = () => {
   useEffect(() => {
     async function fetchCar() {
       try {
-        const response = await axios.get("https://trackingtrip-server.onrender.com/rentCar");
+        const response = await axios.get("http://localhost:3000/rentCar");
         if (response.status === 200) {
           setCurrentItems(response.data);
           setSearch(response.data);
@@ -28,12 +28,24 @@ const ManageServiceData = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://trackingtrip-server.onrender.com/rentCar/${id}`);
-      setCurrentItems((prevCars) => prevCars.filter((car) => car.id !== id));
-      setSearch((prevCars) => prevCars.filter((car) => car.id !== id));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      await axios.delete(`http://localhost:3000/rentCar/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCurrentItems((prevCars) => prevCars.filter((car) => car._id !== id));
+      setSearch((prevCars) => prevCars.filter((car) => car._id !== id));
       toast.success("Car deleted successfully");
     } catch (error) {
       console.error("Error deleting car:", error);
+      toast.error("Error deleting car");
     }
   };
 

@@ -36,7 +36,7 @@ const DashboardEditData = () => {
     const data = { title, price, discount, type, oldPrice, rating, reviews, image_url };
 
     try {
-      const response = await fetch(`https://trackingtrip-server.onrender.com/rentCar/${car._id}`, {
+      const response = await fetch(`http://localhost:3000/rentCar/${car._id}`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
