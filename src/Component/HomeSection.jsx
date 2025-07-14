@@ -55,7 +55,7 @@ const HomeSection = () => {
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       {promotions.map((promo) => (
         <div  key={promo.id} className={`p-6 rounded-lg shadow-md ${promo.background}`}>
-        <img src={promo.logo} alt="Promotion Logo" className="h-10 mb-4" />
+        <img src={promo.logo} alt="Promotion Logo" className="h-10 mb-4 w-full object-contain" />
         <div className="text-sm">Flat</div>
         <div className="text-2xl font-bold text-green-700">{promo.discount}</div>
         <div className="text-sm mb-4">{promo.flightType}</div>

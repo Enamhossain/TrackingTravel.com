@@ -11,12 +11,12 @@ import TrendingArticles from "../../Component/BlogCardSection";
 const Home = () => {
   return (
     <div>
-        <HomeHero />
-       <HomeSection/>
-       <Hotel/>
-       <Car/>
-       <HomeFeatureSection/>
-       <TrendingArticles></TrendingArticles>
+      <HomeHero />
+      <HomeSection />
+      <Hotel />
+      <Car />
+      <HomeFeatureSection />
+      <TrendingArticles></TrendingArticles>
     </div>
   );
 };

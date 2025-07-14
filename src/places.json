@@ -1,0 +1,52 @@
+[
+    {
+        "name": "The Shard",
+        "description": "A modern skyscraper in London, UK.",
+        "image": "https://images.unsplash.com/photo-1602522393332-44862c411a01?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8VGhlJTIwU2hhcmR8ZW58MHx8MHx8fDA%3D"
+    },
+    {
+        "name": "Chichen Itza",
+        "description": "An ancient Mayan city in Mexico.",
+        "image": "https://images.unsplash.com/photo-1512813389649-acb9131ced20?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Q2hpY2hlbiUyMEl0emF8ZW58MHx8MHx8fDA%3D"
+    },
+    {
+        "name": "Neuschwanstein Castle",
+        "description": "A fairy-tale castle in Bavaria, Germany.",
+        "image": "https://images.unsplash.com/photo-1557067175-db3159d938ac?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+        "name": "Mount Rushmore",
+        "description": "A monumental sculpture in South Dakota, USA.",
+        "image": "https://images.unsplash.com/photo-1551202543-28069863dfa5?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+        "name": "Easter Island",
+        "description": "A remote island famous for its Moai statues.",
+        "image": "https://images.unsplash.com/photo-1558299797-bd840732a13e?q=80&w=1548&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+        "name": "Mesa Verde National Park",
+        "description": "An ancient Native American cliff dwelling site in Colorado, USA.",
+        "image": "https://images.unsplash.com/photo-1613942260267-9336eb8b28d2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+        "name": "Uluru (Ayers Rock)",
+        "description": "A large sandstone rock formation in the Northern Territory, Australia.",
+        "image": "https://images.unsplash.com/photo-1698110165839-cb733c672f92?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8VWx1cnUlMjAoQXllcnMlMjBSb2NrKXxlbnwwfHwwfHx8MA%3D%3D"
+    },
+    {
+        "name": "Sagrada Família",
+        "description": "A famous basilica in Barcelona, Spain, designed by Antoni Gaudí.",
+        "image": "https://images.unsplash.com/flagged/photo-1569162002280-e4d071943f4e?q=80&w=1456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+        "name": "Alhambra",
+        "description": "A stunning palace and fortress complex in Granada, Spain.",
+        "image": "https://images.unsplash.com/photo-1564740603199-5f56138c6679?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+        "name": "Giza Pyramid Complex",
+        "description": "Ancient Egyptian pyramid structures near Cairo.",
+        "image": "https://plus.unsplash.com/premium_photo-1697730030977-ea0505bd45ac?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    }
+]

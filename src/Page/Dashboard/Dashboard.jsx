@@ -60,7 +60,7 @@ const Dashboard = () => {
     fetchUserInfo();
   }, [user]);
 
-  console.log(userInfo);
+
 
 
   const handleProfileClick = () => {

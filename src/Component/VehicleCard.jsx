@@ -2,15 +2,21 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-// eslint-disable-next-line react/prop-types
 const VehicleCard = ({ vehicle }) => {
-   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <img src={vehicle.image} alt={vehicle.title} className="w-full h-48 object-cover" />
+     <motion.img 
+        src={vehicle.image} 
+        alt={vehicle.title} 
+        className="w-full h-48 object-cover" 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        whileHover={{ scale: 1.1 }}
+      />
       <div className="p-4">
-      
         <div className="text-red-500 text-xs font-semibold">{vehicle.note}</div>
         <h3 className="text-xl font-bold text-gray-900 mt-2">{vehicle.title}</h3>
         <div className="text-gray-500">{vehicle.type} | {vehicle.features.join(' | ')}</div>
@@ -22,15 +28,22 @@ const VehicleCard = ({ vehicle }) => {
         </div>
         <div className="flex items-center justify-between mt-4">
           <div className="text-red-500 text-sm">{vehicle.discount} % Off</div>
-          <div className="text-xl font-bold text-gray-900"> US${vehicle.price} <span className="text-gray-500 line-through"> US${vehicle.oldPrice}</span></div>
+          <div className="text-xl font-bold text-gray-900">
+            US${vehicle.price} <span className="text-gray-500 line-through">US${vehicle.oldPrice}</span>
+          </div>
         </div>
         <div className="flex items-center justify-between mt-4">
           <div className="text-gray-500 text-sm">{vehicle.reviews}</div>
           <div className="text-red-500 text-sm font-semibold">{vehicle.rating}</div>
         </div>
-        <Link
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Link
             to={`/rentCar/${vehicle._id}`}
-            className="flex text-center justify-center  container mx-auto items-center bg-[#276ef1] px-8 py-4 font-semibold text-white transition [box-shadow:rgb(171,_196,245)-8px_8px] hover:[box-shadow:rgb(171,_196,_245)_0px_0px]"
+            className="flex text-center justify-center container mx-auto items-center bg-[#276ef1] px-8 py-4 font-semibold text-white transition [box-shadow:rgb(171,_196,245)-8px_8px] hover:[box-shadow:rgb(171,_196,_245)_0px_0px]"
           >
             <p className="mr-6 font-bold">Rent Car</p>
             <svg
@@ -43,6 +56,7 @@ const VehicleCard = ({ vehicle }) => {
               <polygon points="16.172 9 10.101 2.929 11.515 1.515 20 10 19.293 10.707 11.515 18.485 10.101 17.071 16.172 11 0 11 0 9"></polygon>
             </svg>
           </Link>
+        </motion.div>
       </div>
     </div>
   );

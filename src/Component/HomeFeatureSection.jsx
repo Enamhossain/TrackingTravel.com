@@ -30,16 +30,16 @@ const HomeFeatureSection = () => {
           <h2 className="text-3xl font-bold text-blue-900">Why Move To TrackingTrip.com</h2>
           <p className="text-gray-600">Cicero famously orated against his political opponent Lucius Sergius Catilina.</p>
         </div>
-        <div className="md:flex items-center">
+        <div className="md:flex items-center flex-col md:flex-row">
           {/* Images Section */}
-          <div className="flex justify-center md:w-1/2">
-            <div className="relative  bottom-8">
-              <img src="https://images.pexels.com/photos/1417255/pexels-photo-1417255.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Couple 1" className=" rounded-full w-60 h-60 object-cover mb-4 md:mb-0" />
-              <img src="https://images.pexels.com/photos/977460/pexels-photo-977460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Couple 2" className="rounded-full w-60 h-60 object-cover absolute top-24 left-24" />
+          <div className="flex justify-center md:w-1/2 w-full mb-8 md:mb-0">
+            <div className="relative bottom-8 w-full flex flex-col items-center">
+              <img src="https://images.pexels.com/photos/1417255/pexels-photo-1417255.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Couple 1" className="rounded-full w-40 h-40 sm:w-60 sm:h-60 object-cover mb-4 md:mb-0" />
+              <img src="https://images.pexels.com/photos/977460/pexels-photo-977460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Couple 2" className="rounded-full w-40 h-40 sm:w-60 sm:h-60 object-cover absolute top-24 left-24" />
             </div>
           </div>
           {/* Features Section */}
-          <div className="mt-8 md:mt-0 md:w-1/2">
+          <div className="mt-8 md:mt-0 md:w-1/2 w-full">
             {features.map((feature) => (
               <div key={feature.id} className="flex items-start mb-8">
                 <div className={`w-10 h-10 flex items-center justify-center text-white rounded-full ${feature.color}`}>

@@ -15,6 +15,8 @@ import ErrorPage from "../Component/ErrorPage";
 import DashboardEditData from "../Page/Dashboard/DashboardEditData";
 import ProfileEditData from "../Page/Dashboard/ProfileEditData";
 import RentCar from "../Page/Rent Car/RentCar";
+import Contact from "../Page/Contact/Contact";
+import Destination from "../Page/Destination/Destination";
 
 // Define the routes using the named export
 export const router = createBrowserRouter([
@@ -33,6 +35,14 @@ export const router = createBrowserRouter([
       {
         path: "hotels",
         element: <Hotel />,
+      },
+      {
+        path: "destination",
+        element: <Destination />,
+      },
+      {
+       path:"contact",
+       element:<Contact/>
       },
       {
         path: "/rentCar/:id",
