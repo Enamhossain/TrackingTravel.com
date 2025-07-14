@@ -2,8 +2,46 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { FaHome, FaCar, FaMoneyBillAlt, FaChartLine, FaCreditCard, FaUserCircle, FaUser, FaServicestack } from 'react-icons/fa';
+import useAuth from '../Hook/useAuth';
+import { useEffect, useState } from 'react';
 
 const DashboardLayout = () => {
+  const { user } = useAuth();
+  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token");
+      if (user?.email) {
+        try {
+          const response = await fetch(`https://trackingtrip-server.onrender.com/users/${user?.email}`, {
+            headers: {
+              "Content-type": "application/json",
+              authorization: `Bearer ${token}`,
+            }
+          });
+          if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+          }
+          const data = await response.json();
+          setUserInfo(data);
+          setLoading(false);
+        } catch (error) {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+    fetchUserInfo();
+  }, [user]);
+
+  if (loading) return <div>Loading...</div>;
+  if (!userInfo || userInfo.role !== 'admin') {
+    return <div className="flex items-center justify-center h-screen text-2xl font-bold text-red-600">Access Denied: Admins Only</div>;
+  }
+
   return (
     <div className="flex h-screen bg-gray-100">
       <aside className="w-64 bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6">
