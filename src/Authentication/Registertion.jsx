@@ -1,29 +1,26 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import Login from "./Login";
 import useAuth from "../Hook/useAuth";
 import toast from "react-hot-toast";
-import { FaEnvelope, FaLock, FaUser, FaPhone, FaGoogle, FaInstagram } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaUser, FaPhone, FaGoogle, FaTimes } from 'react-icons/fa';
+import Logo from "../Shared/Logo";
 
-
-// eslint-disable-next-line react/prop-types
 const Registertion = ({ handleCloseEditModal }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const from = location?.state?.from?.pathname || "/";
-  const handleOpenLoginModal = () => {
-    setShowLoginModal(true);
-  };
-
-  const handleCloseLoginModal = () => {
-    setShowLoginModal(false);
-  };
-
-
   const [passMatch, setPassMatch] = useState(true);
   const [error, setError] = useState('');
-  const { createUser,googleSignIn } = useAuth(); // Ensure correct import and function name
+  const [loading, setLoading] = useState(false);
+  
+  const { createUser, googleSignIn } = useAuth();
+
+  const handleOpenLoginModal = () => setShowLoginModal(true);
+  const handleCloseLoginModal = () => setShowLoginModal(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
     const form = e.target;
     const firstName = form.firstName.value;
     const lastName = form.lastName.value;
@@ -34,152 +31,188 @@ const Registertion = ({ handleCloseEditModal }) => {
    
     if (password !== confirmPassword) {
       setPassMatch(false);
+      setLoading(false);
       return;
     }
 
     setPassMatch(true);
-    setError('');
 
     try {
-      await createUser(email, password)
-      const SaveUserInfo ={
-        email:email,
-        firstName:firstName,
-        lastName:lastName,
-        phoneNumber:phoneNumber,
-        password:password
-      }
-      fetch("https://trackingtrip-server.onrender.com/users", {
+      await createUser(email, password);
+      
+      const SaveUserInfo = {
+        email,
+        firstName,
+        lastName,
+        phoneNumber,
+        password,
+        role: 'user',
+        createdAt: new Date().toISOString()
+      };
+
+      const res = await fetch("https://trackingtrip-server.onrender.com/users", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(SaveUserInfo),
-        
-      })
-      console.log('User created successfully');
-      toast.success('Successfully created!');
-      window.location.reload();
-    } catch (error) {
-      console.error('Error creating user:', error);
-      setError(error.message);
+      });
+
+      if (res.ok) {
+        toast.success('Welcome to TrackingTravel!');
+        handleCloseEditModal();
+        // Use a slight delay before navigating/reloading if needed, 
+        // but usually useAuth handle user state globally
+      }
+    } catch (err) {
+      setError(err.message);
+      toast.error('Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
-    
-  const handleGoogleSingIn = () => {
-    googleSignIn().then((result) => {
-     
-      const users = result?.user;
-      
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googleSignIn();
       const userInfo = {
         email: result.user?.email,
-        name: result.user?.displayName
-      }
-      fetch("https://trackingtrip-server.onrender.com/users", {
+        name: result.user?.displayName,
+        photoURL: result.user?.photoURL,
+        role: 'user'
+      };
+
+      await fetch("https://trackingtrip-server.onrender.com/users", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userInfo),
-        
-      })
-        .then((res) => res.json())
-        .then((data) => {
-         localStorage.setItem('token',data?.token)
-         window.location.reload();
-         toast.success('Successfully created!');
-        });
-       
-     
-    })
-      .catch((error) => {
-        // Handle errors
-        console.error(error);
       });
-  }
+
+      toast.success('Signed in with Google!');
+      handleCloseEditModal();
+    } catch (err) {
+      console.error(err);
+      toast.error('Google Sign-In failed.');
+    }
+  };
 
   return (
     <>
       {showLoginModal ? (
         <Login handleCloseLoginModal={handleCloseLoginModal} />
       ) : (
-        <section className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-900/80 via-blue-950/80 to-black/80 backdrop-blur-sm">
-          <div className="relative bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl w-full max-w-3xl p-0 md:p-8 mx-2 flex flex-col md:flex-row overflow-hidden">
-            {/* Left side: illustration or benefits */}
-            <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-700 to-blue-900 text-white w-1/2 p-8">
-              <h2 className="text-3xl font-bold mb-4">Join TrackingTrip</h2>
-              <p className="text-lg mb-6 text-blue-100">Create your free account and start your next adventure!</p>
-              <img src="https://i.ibb.co/JcGn8XL/Screenshot-12.png" alt="Logo" className="w-24 h-24 rounded-full bg-white/20 shadow-lg" />
+        <section className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-brand-primary/40 backdrop-blur-md" onClick={handleCloseEditModal} />
+          
+          <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl flex flex-col md:flex-row overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-300">
+            
+            {/* Left Decor / Info */}
+            <div className="hidden md:flex flex-col justify-center items-center bg-brand-primary text-white w-[40%] p-12 relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-64 h-64 bg-brand-secondary/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+               <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-accent/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+               
+               <Logo className="w-24 h-24 mb-8" />
+               <h2 className="text-4xl font-display font-black mb-4 text-center">Start Your Journey</h2>
+               <p className="text-brand-accent text-center font-medium opacity-90 leading-relaxed">
+                 Join our community of global explorers and access exclusive travel deals.
+               </p>
             </div>
-            {/* Right side: form */}
-            <div className="w-full md:w-1/2 p-8 relative">
-              <button onClick={handleCloseEditModal} className="absolute top-4 right-4 text-gray-400 hover:text-blue-500 transition md:top-4 md:right-4">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+
+            {/* Right Form */}
+            <div className="w-full md:w-[60%] p-8 md:p-12 max-h-[90vh] overflow-y-auto custom-scrollbar">
+              <button 
+                onClick={handleCloseEditModal} 
+                className="absolute top-6 right-6 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-400 group"
+              >
+                <FaTimes className="group-hover:rotate-90 transition-transform" />
               </button>
-              <h1 className="text-2xl font-bold text-blue-900 mb-2">Create Account</h1>
-              <p className="text-gray-500 mb-6">Let’s get you all set up so you can verify your personal account and begin your journey.</p>
-              <div className="flex flex-col gap-3 mb-4">
-                <button onClick={handleGoogleSingIn} className="flex items-center justify-center gap-3 w-full py-2 rounded-lg border border-gray-200 bg-white hover:bg-blue-50 text-gray-700 font-semibold shadow-sm transition">
-                  <FaGoogle className="text-red-500" /> Sign up with Google
-                </button>
-                <button className="flex items-center justify-center gap-3 w-full py-2 rounded-lg border border-gray-200 bg-white hover:bg-blue-50 text-gray-700 font-semibold shadow-sm transition">
-                  <FaInstagram className="text-pink-500" /> Sign up with Instagram
-                </button>
+
+              <div className="mb-10">
+                <h1 className="text-3xl font-display font-black text-brand-primary mb-2">Create Account</h1>
+                <p className="text-slate-500 font-medium text-sm">Please enter your details to register.</p>
               </div>
-              <div className="flex items-center gap-2 my-4">
-                <span className="flex-1 h-px bg-gray-300" />
-                <span className="text-xs text-gray-400">or</span>
-                <span className="flex-1 h-px bg-gray-300" />
+
+              <button 
+                onClick={handleGoogleSignIn} 
+                className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl border-2 border-slate-100 bg-white hover:border-brand-secondary transition-all font-bold text-slate-700 mb-8 active:scale-[0.98]"
+              >
+                <FaGoogle className="text-brand-secondary" /> 
+                <span>Continue with Google</span>
+              </button>
+
+              <div className="flex items-center gap-4 mb-8">
+                <span className="flex-1 h-px bg-slate-100" />
+                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">or register with email</span>
+                <span className="flex-1 h-px bg-slate-100" />
               </div>
-              <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><FaUser /></span>
-                  <input type="text" placeholder="First Name" name="firstName" className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition" />
+
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">First Name</label>
+                  <div className="relative">
+                    <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm" />
+                    <input required name="firstName" type="text" placeholder="John" className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-brand-secondary/20 transition-all font-bold text-brand-primary placeholder:text-slate-300" />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><FaUser /></span>
-                  <input type="text" placeholder="Last Name" name="lastName" className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition" />
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Last Name</label>
+                  <div className="relative">
+                    <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm" />
+                    <input required name="lastName" type="text" placeholder="Doe" className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-brand-secondary/20 transition-all font-bold text-brand-primary placeholder:text-slate-300" />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><FaPhone /></span>
-                  <input type="text" placeholder="Phone Number" name="phoneNumber" className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition" />
+
+                <div className="md:col-span-2 space-y-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                  <div className="relative">
+                    <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm" />
+                    <input required name="email" type="email" placeholder="example@mail.com" className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-brand-secondary/20 transition-all font-bold text-brand-primary placeholder:text-slate-300" />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><FaEnvelope /></span>
-                  <input type="email" placeholder="Email Address" name="email" className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition" />
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                  <div className="relative">
+                    <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm" />
+                    <input required name="password" type="password" placeholder="••••••••" className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-brand-secondary/20 transition-all font-bold text-brand-primary placeholder:text-slate-300" />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><FaLock /></span>
-                  <input type="password" placeholder="Password" name="password" className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition" />
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Confirm</label>
+                  <div className="relative">
+                    <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm" />
+                    <input required name="confirmPassword" type="password" placeholder="••••••••" className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-brand-secondary/20 transition-all font-bold text-brand-primary placeholder:text-slate-300" />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><FaLock /></span>
-                  <input type="password" placeholder="Confirm Password" name="confirmPassword" className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition" />
+
+                <div className="md:col-span-2 mt-4">
+                  {(!passMatch || error) && (
+                    <p className="text-brand-secondary text-xs font-bold mb-4 bg-brand-secondary/5 p-3 rounded-xl border border-brand-secondary/10">
+                      {error || "Passwords do not match. Please check again."}
+                    </p>
+                  )}
+                  <button 
+                    disabled={loading}
+                    type="submit" 
+                    className="w-full py-4 bg-brand-secondary text-white rounded-2xl font-black shadow-xl shadow-brand-secondary/30 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 uppercase tracking-widest text-sm"
+                  >
+                    {loading ? "Creating Account..." : "Create Account"}
+                  </button>
                 </div>
-                {!passMatch && (
-                  <p className="text-red-600 text-sm">Passwords do not match</p>
-                )}
-                {error && (
-                  <p className="text-red-600 text-sm">{error}</p>
-                )}
-                <button className="w-full py-3 mt-2 text-base font-semibold tracking-wide text-white capitalize transition-all duration-300 transform bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg shadow hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
-                  Create Account
-                </button>
               </form>
-              <div className="text-center mt-6 text-sm text-gray-500">
-                Already have an account?{' '}
-                <button onClick={handleOpenLoginModal} className="text-blue-600 hover:underline">Log in</button>
+
+              <div className="text-center mt-10">
+                <p className="text-sm font-medium text-slate-500">
+                  Already have an account?{' '}
+                  <button onClick={handleOpenLoginModal} className="text-brand-secondary font-black hover:underline underline-offset-4 decoration-2">Sign In</button>
+                </p>
               </div>
             </div>
           </div>
         </section>
       )}
-      </>
-    );
- 
+    </>
+  );
 };
 
 export default Registertion;

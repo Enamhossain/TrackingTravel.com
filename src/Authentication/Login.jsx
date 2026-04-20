@@ -1,119 +1,136 @@
-// Login.js
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect } from "react";
-
+import React, { useState } from "react";
 import useAuth from "../Hook/useAuth";
-import { useLocation, useNavigate } from "react-router-dom";
-import { FaEnvelope, FaLock, FaGoogle, FaFacebookF } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaGoogle, FaTimes } from 'react-icons/fa';
+import toast from "react-hot-toast";
+import Logo from "../Shared/Logo";
 
-
-
-
-// eslint-disable-next-line react/prop-types
 const Login = ({ handleCloseLoginModal }) => {
-    
-    const {  googleSignIn, singIn ,user } = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location?.state?.from?.pathname || "/";
-    
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const email = form.email.value;
-      const password = form.password.value;
-      
+  const { googleSignIn, singIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   
-      await singIn(email, password);
-    };
-  
-  
-    
-    const handleGoogleSignIn = () => {
-      googleSignIn().then((data) => {
-        if (data?.user?.email) {
-          const userInfo = {
-            email: data?.user?.email,
-            name: data?.user?.displayName,
-          };
-         
-          fetch("https://trackingtrip-server.onrender.com/users", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userInfo),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-             console.log(data)
-            });
-        }
-      });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-    useEffect(() => {
-        if (user) {
-          navigate(from, { replace: true });
-        }
-      }, [user, from, navigate]);
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
     
+    try {
+      await singIn(email, password);
+      toast.success('Successfully logged in!');
+      handleCloseLoginModal();
+    } catch (err) {
+      setError(err.message);
+      toast.error('Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googleSignIn();
+      const userInfo = {
+        email: result.user?.email,
+        name: result.user?.displayName,
+        photoURL: result.user?.photoURL,
+        role: 'user'
+      };
+
+      await fetch("https://trackingtrip-server.onrender.com/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userInfo),
+      });
+
+      toast.success('Welcome back!');
+      handleCloseLoginModal();
+    } catch (err) {
+      console.error(err);
+      toast.error('Google Sign-In failed.');
+    }
+  };
 
   return (
-    <section className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-900/80 via-blue-950/80 to-black/80 backdrop-blur-sm">
-      <div className="relative bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl w-full max-w-md p-8 mx-2">
-        <button onClick={handleCloseLoginModal} className="absolute top-4 right-4 text-gray-400 hover:text-blue-500 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        <h1 className="text-2xl font-bold text-center text-blue-900 mb-2">Welcome Back</h1>
-        <p className="text-center text-gray-500 mb-6">Log in to your account</p>
-        <div className="flex flex-col gap-3 mb-4">
-          <button onClick={handleGoogleSignIn} className="flex items-center justify-center gap-3 w-full py-2 rounded-lg border border-gray-200 bg-white hover:bg-blue-50 text-gray-700 font-semibold shadow-sm transition">
-            <FaGoogle className="text-red-500" /> Sign in with Google
-          </button>
-          <button className="flex items-center justify-center gap-3 w-full py-2 rounded-lg border border-gray-200 bg-white hover:bg-blue-50 text-gray-700 font-semibold shadow-sm transition">
-            <FaFacebookF className="text-blue-600" /> Sign in with Facebook
-          </button>
+    <section className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-brand-primary/40 backdrop-blur-md" onClick={handleCloseLoginModal} />
+      
+      <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden border border-white/20 animate-in fade-in slide-in-from-bottom-4 duration-300">
+        
+        {/* Header decoration */}
+        <div className="bg-brand-primary p-8 flex flex-col items-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+          <Logo className="w-16 h-16 mb-4 relative z-10" />
+          <h2 className="text-2xl font-display font-black text-white relative z-10">Welcome Back</h2>
+          <p className="text-brand-accent/80 text-xs font-bold uppercase tracking-widest relative z-10">TrackingTravel Account</p>
         </div>
-        <div className="flex items-center gap-2 my-4">
-          <span className="flex-1 h-px bg-gray-300" />
-          <span className="text-xs text-gray-400">or</span>
-          <span className="flex-1 h-px bg-gray-300" />
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <FaEnvelope />
-            </span>
-            <input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition"
-              autoComplete="email"
-            />
-          </div>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <FaLock />
-            </span>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              className="block w-full pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400 bg-white/90 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 transition"
-              autoComplete="current-password"
-            />
-          </div>
-          <button className="w-full py-3 mt-2 text-base font-semibold tracking-wide text-white capitalize transition-all duration-300 transform bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg shadow hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
-            Log in
+
+        <div className="p-8 md:p-10">
+          <button 
+            onClick={handleCloseLoginModal} 
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-400 md:text-white md:hover:bg-white/10"
+          >
+            <FaTimes />
           </button>
-        </form>
-        <div className="text-center mt-6 text-sm text-gray-500">
-          Don&apos;t have an account?{' '}
-          <a href="/registertion" className="text-blue-600 hover:underline">Sign up</a>
+
+          <button 
+            onClick={handleGoogleSignIn} 
+            className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 hover:border-brand-secondary transition-all font-bold text-slate-700 mb-8 active:scale-[0.98]"
+          >
+            <FaGoogle className="text-brand-secondary" /> 
+            <span>Sign in with Google</span>
+          </button>
+
+          <div className="flex items-center gap-4 mb-8">
+            <span className="flex-1 h-px bg-slate-100" />
+            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">or email login</span>
+            <span className="flex-1 h-px bg-slate-100" />
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
+              <div className="relative">
+                <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm" />
+                <input required name="email" type="email" placeholder="you@mail.com" className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-brand-secondary/20 transition-all font-bold text-brand-primary placeholder:text-slate-300" />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between ml-1">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Password</label>
+                <button type="button" className="text-[10px] font-black text-brand-secondary uppercase hover:underline">Forgot?</button>
+              </div>
+              <div className="relative">
+                <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm" />
+                <input required name="password" type="password" placeholder="••••••••" className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-brand-secondary/20 transition-all font-bold text-brand-primary placeholder:text-slate-300" />
+              </div>
+            </div>
+
+            {error && (
+              <p className="text-brand-secondary text-xs font-bold bg-brand-secondary/5 p-3 rounded-xl border border-brand-secondary/10 mb-4">
+                {error}
+              </p>
+            )}
+
+            <button 
+              disabled={loading}
+              type="submit" 
+              className="w-full py-4 bg-brand-secondary text-white rounded-2xl font-black shadow-xl shadow-brand-secondary/30 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 uppercase tracking-widest text-sm mt-4"
+            >
+              {loading ? "Verifying..." : "Access Account"}
+            </button>
+          </form>
+
+          <div className="text-center mt-10">
+            <p className="text-sm font-medium text-slate-500">
+              New explorer?{' '}
+              <a href="/registertion" className="text-brand-secondary font-black hover:underline underline-offset-4 decoration-2">Create Account</a>
+            </p>
+          </div>
         </div>
       </div>
     </section>
