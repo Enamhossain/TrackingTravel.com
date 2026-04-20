@@ -1,57 +1,44 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from 'react'
+import React from 'react';
 import VehicleCard from '../../Component/VehicleCard';
-import useAuth from '../../Hook/useAuth';
+import { useOptimizedFetch } from '../../Hook/useOptimizedFetch';
+import { CardSkeleton, ErrorState } from '../../Shared/FeedbackStates';
 
 const Car = () => {
-  const [vehicles, setVehicle] = useState([]);
-  const {loading} = useAuth() 
-    
-    useEffect(() => {
-      fetch('https://trackingtrip-server.onrender.com/RentCar')
-        .then(response => response.json())
-        .then(data =>setVehicle(data))
-        
-    }, [])
+  const { data: vehicles, loading, error, refetch } = useOptimizedFetch('https://trackingtrip-server.onrender.com/RentCar');
 
   return (
-    <section className="py-12 bg-gray-50">
-    <div className="container mx-auto px-4 md:px-12 lg:px-24">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-blue-900">Our Awesome Vehicles</h2>
-        <p className="text-gray-600">Cicero famously orated against his political opponent Lucius Sergius Catilina.</p>
-      </div>
-      {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-5">
-            {vehicles?.map((vehicle) => (
+    <section className="py-24 bg-brand-bg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-sm font-bold text-brand-secondary uppercase tracking-widest mb-4">Our Fleet</h2>
+          <h3 className="text-4xl md:text-5xl font-display font-black text-brand-primary">Our Awesome Vehicles</h3>
+          <p className="mt-4 text-slate-500 max-w-2xl mx-auto italic">
+            Discover the perfect ride for your next trip, from luxury sedans to rugged off-roaders.
+          </p>
+        </div>
+
+        {error && <ErrorState message={error} onRetry={refetch} />}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {loading ? (
+             [...Array(3)].map((_, i) => <CardSkeleton key={i} />)
+          ) : (
+            vehicles?.map((vehicle) => (
               <VehicleCard key={vehicle.id} vehicle={vehicle} />
-            ))}
+            ))
+          )}
+        </div>
+
+        {!loading && !error && (
+          <div className="flex justify-center">
+            <button className="px-10 py-4 bg-brand-primary text-white font-bold rounded-2xl hover:bg-brand-secondary transition-all transform hover:-translate-y-1 shadow-xl shadow-brand-primary/20">
+              Explore Entire Fleet
+            </button>
           </div>
         )}
-
-        <div
-         
-          className="flex text-center justify-center container mx-auto items-center bg-[#276ef1] px-8 py-4 font-semibold text-white transition [box-shadow:rgb(171,_196,245)-8px_8px] hover:[box-shadow:rgb(171,_196,_245)_0px_0px]"
-        >
-          <a  href="#" className="mr-6 font-bold">View More</a>
-          <svg
-            fill="currentColor"
-            className="h-4 w-4 flex-none"
-            viewBox="0 0 20 21"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <title>Arrow Right</title>
-            <polygon points="16.172 9 10.101 2.929 11.515 1.515 20 10 19.293 10.707 11.515 18.485 10.101 17.071 16.172 11 0 11 0 9"></polygon>
-          </svg>
-        </div>
       </div>
-      
-  </section>
-  )
-}
+    </section>
+  );
+};
 
-export default Car
+export default Car;

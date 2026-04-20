@@ -29,33 +29,63 @@ const Destination = () => {
   }
 
   return (
-    <div className="w-full bg-blue-600 text-white p-10">
-      <header className="p-10 flex justify-center items-center">
-        <h1 className="text-2xl font-bold">Tourist Destinations</h1>
+    <div className="w-full bg-brand-bg min-h-screen pt-24 pb-20">
+      <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="flex flex-col items-center text-center">
+          <h1 className="text-sm font-bold text-brand-secondary uppercase tracking-widest mb-4">Explore the World</h1>
+          <h2 className="text-4xl md:text-5xl font-display font-black text-brand-primary">Tourist Destinations</h2>
+          <p className="mt-4 text-slate-500 max-w-2xl">
+            Discover breathtaking locations and hidden gems carefully curated for your next adventure.
+          </p>
+        </div>
       </header>
-      <div className="w-full mt-4 bg-blue-500">
-        <MapComponent />
+
+      {/* Map Section with Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-video lg:aspect-[3/1]">
+           <MapComponent />
+        </div>
       </div>
-      <div className="flex flex-wrap justify-center mt-10">
-        {touristPlaces.map((place, index) => (
-          <motion.div
-            key={index}
-            className="bg-white text-black p-4 rounded-lg shadow-md m-2 w-full sm:w-1/2 lg:w-1/3"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-          >
-            <img src={place.image} alt={place.name} className="rounded-t-lg w-full h-48 object-cover" />
-            <div className="p-4">
-              <h2 className="text-xl font-bold">{place.name}</h2>
-              <p>{place.description}</p>
-            </div>
-          </motion.div>
-        ))}
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {touristPlaces.map((place, index) => (
+            <motion.div
+              key={index}
+              className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div className="aspect-[4/3] overflow-hidden">
+                <img 
+                  src={place.image} 
+                  alt={place.name} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-display font-bold text-brand-primary mb-2 group-hover:text-brand-secondary transition-colors">
+                  {place.name}
+                </h3>
+                <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                  {place.description}
+                </p>
+                <div className="mt-6 pt-4 border-t border-slate-50">
+                  <button className="text-xs font-bold text-brand-secondary uppercase tracking-widest hover:text-brand-primary transition-colors flex items-center gap-2">
+                    Explore More
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
+
 
 export default Destination;
 

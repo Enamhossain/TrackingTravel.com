@@ -6,57 +6,76 @@ import { motion } from 'framer-motion';
 
 const VehicleCard = ({ vehicle }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-     <motion.img 
-        src={vehicle.image} 
-        alt={vehicle.title} 
-        className="w-full h-48 object-cover" 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        whileHover={{ scale: 1.1 }}
-      />
-      <div className="p-4">
-        <div className="text-red-500 text-xs font-semibold">{vehicle.note}</div>
-        <h3 className="text-xl font-bold text-gray-900 mt-2">{vehicle.title}</h3>
-        <div className="text-gray-500">{vehicle.type} | {vehicle.features.join(' | ')}</div>
-        <div className="text-green-600 text-sm mt-2">{vehicle.cancellation}</div>
-        <div className="flex flex-wrap mt-2">
-          {vehicle?.tags?.map((tag, index) => (
-            <span key={index} className="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded">{tag}</span>
-          ))}
+    <div className="group bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 flex flex-col h-full">
+      <div className="relative aspect-video overflow-hidden">
+        <motion.img 
+          src={vehicle.image} 
+          alt={vehicle.title} 
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+        <div className="absolute top-4 left-4">
+          <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-black text-brand-primary uppercase tracking-tighter shadow-sm">
+            {vehicle.type}
+          </span>
         </div>
-        <div className="flex items-center justify-between mt-4">
-          <div className="text-red-500 text-sm">{vehicle.discount} % Off</div>
-          <div className="text-xl font-bold text-gray-900">
-            US${vehicle.price} <span className="text-gray-500 line-through">US${vehicle.oldPrice}</span>
+        {vehicle.discount > 0 && (
+          <div className="absolute top-4 right-4 animate-bounce">
+            <span className="px-3 py-1 bg-brand-accent text-white rounded-full text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-brand-accent/20">
+              Save {vehicle.discount}%
+            </span>
+          </div>
+        )}
+      </div>
+
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-display font-bold text-xl text-brand-primary line-clamp-1">{vehicle.title}</h3>
+          <div className="flex items-center gap-1">
+             <span className="text-yellow-400">
+                <svg className="h-3 w-3 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
+                </svg>
+              </span>
+              <span className="text-xs font-bold text-brand-primary">{vehicle.rating}</span>
           </div>
         </div>
-        <div className="flex items-center justify-between mt-4">
-          <div className="text-gray-500 text-sm">{vehicle.reviews}</div>
-          <div className="text-red-500 text-sm font-semibold">{vehicle.rating}</div>
+        
+        <p className="text-sm font-medium text-slate-500 mb-4">{vehicle.features.join(' • ')}</p>
+
+        <div className="flex items-center gap-2 mb-6">
+          {vehicle?.tags?.slice(0, 2).map((tag, index) => (
+            <span key={index} className="text-[10px] font-bold text-brand-secondary bg-blue-50 px-2 py-1 rounded-lg uppercase tracking-tight">
+              {tag}
+            </span>
+          ))}
+          {vehicle.cancellation && (
+             <span className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-lg uppercase tracking-tight">
+              Free Cancellation
+            </span>
+          )}
         </div>
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
+
+        <div className="mt-auto flex items-center justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 font-sans">Price from</p>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-black text-brand-primary">${vehicle.price}</span>
+              {vehicle.oldPrice && (
+                <span className="text-sm font-medium text-slate-400 line-through">${vehicle.oldPrice}</span>
+              )}
+            </div>
+          </div>
+          
           <Link
             to={`/rentCar/${vehicle._id}`}
-            className="flex text-center justify-center container mx-auto items-center bg-[#276ef1] px-8 py-4 font-semibold text-white transition [box-shadow:rgb(171,_196,245)-8px_8px] hover:[box-shadow:rgb(171,_196,_245)_0px_0px]"
+            className="px-6 py-3 bg-brand-primary text-white rounded-2xl font-bold text-sm hover:bg-brand-secondary transition-all shadow-lg shadow-brand-primary/20"
           >
-            <p className="mr-6 font-bold">Rent Car</p>
-            <svg
-              fill="currentColor"
-              className="h-4 w-4 flex-none"
-              viewBox="0 0 20 21"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Arrow Right</title>
-              <polygon points="16.172 9 10.101 2.929 11.515 1.515 20 10 19.293 10.707 11.515 18.485 10.101 17.071 16.172 11 0 11 0 9"></polygon>
-            </svg>
+            Details
           </Link>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

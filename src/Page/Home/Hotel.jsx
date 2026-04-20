@@ -1,31 +1,29 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import HomeRentCard from '../../Component/HomeRentCard';
-
-
+import { useOptimizedFetch } from '../../Hook/useOptimizedFetch';
+import { CardSkeleton, ErrorState } from '../../Shared/FeedbackStates';
 
 const Hotel = () => {
-  const [rentalProperties, setrentalProperties] = useState([]);
-   
-    
-  useEffect(() => {
-    fetch('https://trackingtrip-server.onrender.com/RentalProperties')
-      .then(response => response.json())
-      .then(data =>setrentalProperties(data))
-      
-  }, [])
+  const { data: rentalProperties, loading, error, refetch } = useOptimizedFetch('https://trackingtrip-server.onrender.com/RentalProperties');
+
   return (
-    <section>
-      <div className="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
-        <div className="flex flex-col items-center">
-          <h2 className="max-w-3xl text-center  md:text-5xl text-3xl font-bold text-blue-900">
-            Explore Hot Rental Properties
-          </h2>
-          <p className="mb-12 mt-4 text-[#636262]">
-            Discover the best rental deals available right now
-          </p>
-          <div className="mb-12 grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-            {rentalProperties.map((property) => (
+    <section className="bg-brand-bg py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 className="text-sm font-bold text-brand-secondary uppercase tracking-widest mb-4">Curated Stays</h2>
+        <h3 className="text-4xl md:text-5xl font-display font-black text-brand-primary mb-6">
+          Explore Hot Rental Properties
+        </h3>
+        <p className="max-w-2xl mx-auto text-lg text-slate-500 mb-16">
+          Discover hand-picked accommodations that offer the perfect blend of comfort and luxury.
+        </p>
+
+        {error && <ErrorState message={error} onRetry={refetch} />}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {loading ? (
+            [...Array(3)].map((_, i) => <CardSkeleton key={i} />)
+          ) : (
+            rentalProperties?.map((property) => (
               <HomeRentCard
                 key={property.id}
                 image={property.image}
@@ -35,24 +33,15 @@ const Hotel = () => {
                 price={property.price}
                 review={property.review}
               />
-            ))}
-          </div>
-          <a
-            href="#"
-            className="flex flex-row items-center bg-[#276ef1] px-8 py-4 font-semibold text-white transition [box-shadow:rgb(171,_196,245)-8px_8px] hover:[box-shadow:rgb(171,_196,_245)_0px_0px]"
-          >
-            <p className="mr-6 font-bold">View More</p>
-            <svg
-              fill="currentColor"
-              className="h-4 w-4 flex-none"
-              viewBox="0 0 20 21"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Arrow Right</title>
-              <polygon points="16.172 9 10.101 2.929 11.515 1.515 20 10 19.293 10.707 11.515 18.485 10.101 17.071 16.172 11 0 11 0 9"></polygon>
-            </svg>
-          </a>
+            ))
+          )}
         </div>
+
+        {!loading && !error && (
+          <button className="px-10 py-4 bg-white border-2 border-brand-primary text-brand-primary font-bold rounded-2xl hover:bg-brand-primary hover:text-white transition-all transform hover:-translate-y-1 shadow-lg shadow-slate-200">
+            View All Properties
+          </button>
+        )}
       </div>
     </section>
   );
