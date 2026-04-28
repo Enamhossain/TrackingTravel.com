@@ -3,17 +3,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
-import Registertion from "../Authentication/Registertion";
 import useAuth from "../Hook/useAuth";
 import toast from "react-hot-toast";
-import icon from "../assets/Icon.png";
-import { FaBlog, FaCarAlt, FaCaretDown, FaChartLine, FaHome, FaPhoneAlt, FaPlane, FaBiking, FaShip } from "react-icons/fa";
-
+import { FaCarAlt, FaCaretDown, FaChartLine, FaHome, FaBiking } from "react-icons/fa";
 import Logo from "./Logo";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [rentDropdown, setRentDropdown] = useState(false);
   const [mobileRentDropdown, setMobileRentDropdown] = useState(false);
   const { logOut, user } = useAuth();
@@ -76,15 +72,6 @@ const Navbar = () => {
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
-
-  const handleCloseEditModal = () => {
-    setShowEditModal(false);
-  };
-
-  const handleOpenEditModal = () => {
-    setShowEditModal(true);
-    setIsOpen(false); // Close mobile menu when opening modal
-  };
 
   const handleLogout = async () => {
     try {
@@ -175,12 +162,20 @@ const Navbar = () => {
               </div>
             </div>
           ) : (
-            <button 
-              onClick={handleOpenEditModal} 
-              className="px-6 py-2.5 bg-brand-secondary text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-secondary/20 hover:scale-105 active:scale-95 transition-all"
-            >
-              Get Started
-            </button>
+            <div className="flex items-center gap-3">
+              <Link 
+                to="/login"
+                className="hidden sm:block text-sm font-bold text-slate-600 hover:text-brand-primary transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link 
+                to="/registertion" 
+                className="px-6 py-2.5 bg-brand-secondary text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-secondary/20 hover:scale-105 active:scale-95 transition-all"
+              >
+                Get Started
+              </Link>
+            </div>
           )}
 
           {/* Mobile Menu Button */}
@@ -212,12 +207,13 @@ const Navbar = () => {
           {user ? (
             <button className="w-full mt-8 p-4 rounded-2xl bg-brand-accent/10 text-brand-accent font-bold" onClick={handleLogout}>Log Out</button>
           ) : (
-            <button className="w-full mt-8 p-4 rounded-2xl bg-brand-primary text-white font-bold" onClick={handleOpenEditModal}>Sign In</button>
+            <div className="space-y-3 mt-8">
+              <Link to="/login" className="block w-full p-4 rounded-2xl bg-slate-50 text-slate-700 font-bold text-center" onClick={handleMobileNavClick}>Sign In</Link>
+              <Link to="/registertion" className="block w-full p-4 rounded-2xl bg-brand-primary text-white font-bold text-center" onClick={handleMobileNavClick}>Create Account</Link>
+            </div>
           )}
         </div>
       </div>
-
-      {showEditModal && <Registertion handleCloseEditModal={handleCloseEditModal} />}
     </header>
 
   );
