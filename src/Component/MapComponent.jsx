@@ -1,7 +1,7 @@
 
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 
-const API_KEY = 'AIzaSyDQknBs9q22lfeO6nvPaVDvU0N7aBzduxg'; // Replace with your API key
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // Managed via .env file
 
 
 
